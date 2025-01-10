@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:gravity="center_horizontal"
+    android:paddingHorizontal="16dp"
+    android:background="#252525"
+    tools:context=".ui.fragments.onboard.OnBoardPagerFragment">
+
+    <TextView
+        android:id="@+id/txt_notes"
+        android:textSize="24sp"
+        android:textColor="#FFFFFF"
+        android:text="Notes"
+        android:layout_marginTop="76dp"
+        android:fontFamily="@font/potta_one_regular"
+        android:layout_width="78dp"
+        android:layout_height="36dp"/>
+
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/animation"
+        app:lottie_autoPlay="true"
+        app:lottie_loop="true"
+        android:layout_width="288dp"
+        android:layout_height="264dp"/>
+
+    <TextView
+        android:id="@+id/txt_onboard_title"
+        android:textSize="26sp"
+        android:textColor="#FFFFFF"
+        android:text="Удобство"
+        android:textStyle="bold"
+        android:layout_marginTop="46dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <TextView
+        android:id="@+id/txt_onboard_description"
+        android:layout_marginTop="8dp"
+        android:textSize="18sp"
+        android:textColor="#CFCFCF"
+        android:textAlignment="center"
+        android:text="Создавайте заметки в два клика! Записывайте мысли, идеи и важные задачи мгновенно."
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+</LinearLayout>
