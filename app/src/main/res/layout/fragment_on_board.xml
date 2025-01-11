@@ -38,6 +38,8 @@
        android:id="@+id/button"
        android:layout_width="230dp"
        android:layout_height="58dp"
+       android:visibility="invisible"
+       android:alpha="0"
        android:backgroundTint="#D88B02"
        android:fontFamily="@font/roboto_bold"
        android:text="Начать"

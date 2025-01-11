@@ -31,6 +31,11 @@ class OnBoardFragment : Fragment() {
         binding.viewPager.adapter = OnBoardAdapter(this)
 
         binding.dotsIndicator.setViewPager2(binding.viewPager)
+
+        binding.viewPager.setPageTransformer{ page, position ->
+            page.alpha = 0.25f + (1 - Math.abs(position)) * 0.75f
+            page.translationX = -position * page.width * 0.5f
+        }
     }
 
     private fun setupListeners() = with(binding.viewPager){
@@ -39,10 +44,14 @@ class OnBoardFragment : Fragment() {
                 super.onPageSelected(position)
                 when (position) {
                     0,1 -> {
-                        binding.button.visibility = View.INVISIBLE
+                        button.animate().alpha(0f).setDuration(300).withEndAction{
+                        button.visibility = View.INVISIBLE
+                        }.start()
                     }
                     2 -> {
-                        binding.button.visibility = View.VISIBLE
+                        button.visibility = View.VISIBLE
+                        button.alpha = 0f
+                        button.animate().alpha(1f).setDuration(500).start()
                     }
                 }
                 if (position == 2){
