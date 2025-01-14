@@ -5,9 +5,12 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.fragment.findNavController
 import androidx.viewpager2.widget.ViewPager2
+import com.geeks.noteapp.R
 import com.geeks.noteapp.databinding.FragmentOnBoardBinding
 import com.geeks.noteapp.ui.adapters.OnBoardAdapter
+import com.geeks.noteapp.utils.PreferenceHelper
 
 class OnBoardFragment : Fragment() {
 
@@ -64,5 +67,11 @@ class OnBoardFragment : Fragment() {
                 }
             }
         })
+        binding.button.setOnClickListener{
+            val sharedPreferences = PreferenceHelper()
+            sharedPreferences.unit(requireContext())
+            sharedPreferences.onBoard = true
+            findNavController().navigate(R.id.noteFragment)
+        }
     }
 }
