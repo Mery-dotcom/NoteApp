@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.geeks.notapp.ui.adapters.NoteAdapter
 import com.geeks.noteapp.App
@@ -20,6 +21,7 @@ class NoteFragment : Fragment(), OnClickItem {
 
     private lateinit var binding: FragmentNoteBinding
     private val noteAdapter = NoteAdapter(this, this)
+    private var isLinearLayout = true
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -43,25 +45,40 @@ class NoteFragment : Fragment(), OnClickItem {
         }
     }
 
-    private fun setupListener()  = with(binding){
+    private fun toggleLayoutManager() {
+        isLinearLayout = !isLinearLayout
+        binding.rvInfo.layoutManager = if (isLinearLayout) {
+            LinearLayoutManager(requireContext())
+        } else {
+            GridLayoutManager(requireContext(), 2)
+        }
+        noteAdapter.notifyDataSetChanged()
+    }
+
+    private fun setupListener() = with(binding) {
         fabAdd.setOnClickListener {
             findNavController().navigate(R.id.action_noteFragment_to_noteDetailFragment)
+        }
+
+        btnVariations.setOnClickListener {
+            toggleLayoutManager()
         }
     }
 
     private fun getData() {
-        App.appDataBase?.noteDao()?.getAll()?.observe(viewLifecycleOwner){ model ->
+        App.appDataBase?.noteDao()?.getAll()?.observe(viewLifecycleOwner) { model ->
             noteAdapter.submitList(model)
         }
     }
+
     override fun onLongClick(noteModel: NoteModel) {
         val builder = AlertDialog.Builder(requireContext())
-        with(builder){
+        with(builder) {
             setTitle("Удалить заметку")
-            setPositiveButton("Удалить"){ dialog, _ ->
+            setPositiveButton("Удалить") { dialog, _ ->
                 App.appDataBase?.noteDao()?.deleteNote(noteModel)
             }
-            setNegativeButton("Отмена"){ dialog, _ ->
+            setNegativeButton("Отмена") { dialog, _ ->
                 dialog.cancel()
             }
             show()
