@@ -18,7 +18,7 @@ class NoteAdapter(
             binding.noteTitle.text = item.title
             binding.noteDescription.text = item.description
             binding.noteTime.text = "${item.date} ${item.time}"
-            binding.root.setBackgroundColor(item.color!!)
+            binding.container.setBackgroundColor(item.color!!)
         }
     }
 

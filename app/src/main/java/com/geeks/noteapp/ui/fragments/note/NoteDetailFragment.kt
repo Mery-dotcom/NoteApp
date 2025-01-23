@@ -53,7 +53,6 @@ class NoteDetailFragment : Fragment() {
                 binding.etTitle.setText(model.title)
                 binding.etDescription.setText(model.description)
                 selectedColor = model.color!!
-                binding.root.setBackgroundColor(selectedColor)
             }
         }
     }
