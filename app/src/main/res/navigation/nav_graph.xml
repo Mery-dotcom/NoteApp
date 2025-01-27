@@ -37,4 +37,14 @@
             android:name="noteId"
             app:argType="integer" />
     </fragment>
+    <fragment
+        android:id="@+id/authFragment"
+        android:name="com.geeks.noteapp.ui.fragments.signing.AuthFragment"
+        android:label="fragment_auth"
+        tools:layout="@layout/fragment_auth" />
+    <fragment
+        android:id="@+id/splashScreenFragment"
+        android:name="com.geeks.noteapp.ui.fragments.splashScreen.SplashScreenFragment"
+        android:label="fragment_splash_screen"
+        tools:layout="@layout/fragment_splash_screen" />
 </navigation>

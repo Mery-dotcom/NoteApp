@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    android:background="#252525"
+    tools:context=".ui.fragments.signing.AuthFragment">
+
+    <TextView
+        android:id="@+id/txt_notes"
+        android:textSize="24sp"
+        android:fontFamily="@font/potta_one_regular"
+        android:textColor="#FFFFFF"
+        android:text="Notes"
+        android:layout_marginTop="78dp"
+        android:layout_width="78dp"
+        android:layout_height="36dp"/>
+
+    <ImageView
+        android:id="@+id/iv_note"
+        android:layout_marginTop="140dp"
+        android:layout_marginBottom="38dp"
+        android:src="@drawable/auth"
+        android:layout_width="160dp"
+        android:layout_height="160dp"/>
+
+    <TextView
+        android:id="@+id/txt_auto"
+        android:layout_marginBottom="52dp"
+        android:fontFamily="@font/roboto_regular"
+        android:text="Авторизация"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        android:layout_width="126dp"
+        android:layout_height="24dp" />
+
+    <Button
+        android:id="@+id/btn_auth"
+        android:text="Sign in with Google"
+        android:fontFamily="@font/roboto_regular"
+        android:textColor="@color/black"
+        android:backgroundTint="@color/white"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+</LinearLayout>
