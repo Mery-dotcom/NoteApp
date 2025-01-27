@@ -22,7 +22,7 @@ class MainActivity : AppCompatActivity() {
         val sharedPreferences = PreferenceHelper()
         sharedPreferences.unit(this)
 
-        if (sharedPreferences.onBoard){
+        if (sharedPreferences.onBoard && sharedPreferences.isRegistered){
             navController.navigate(R.id.noteFragment)
         }else{
             navController.navigate(R.id.onBoardFragment)

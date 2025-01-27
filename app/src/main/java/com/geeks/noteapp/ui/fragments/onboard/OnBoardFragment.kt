@@ -71,6 +71,7 @@ class OnBoardFragment : Fragment() {
             val sharedPreferences = PreferenceHelper()
             sharedPreferences.unit(requireContext())
             sharedPreferences.onBoard = true
+            sharedPreferences.isRegistered = true
             findNavController().navigate(R.id.noteFragment)
         }
     }

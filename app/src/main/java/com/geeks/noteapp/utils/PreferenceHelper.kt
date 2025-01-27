@@ -18,4 +18,8 @@ class PreferenceHelper {
     var onBoard: Boolean
         get() = sharedPreferences.getBoolean("onBoard", false)
         set(value) = sharedPreferences.edit().putBoolean("onBoard", value).apply()
+
+    var isRegistered: Boolean
+        get() = sharedPreferences.getBoolean("registered", false)
+        set(value) = sharedPreferences.edit().putBoolean("registered", value).apply()
 }
