@@ -27,6 +27,9 @@
             app:exitAnim="@anim/slide_out_left"
             app:popExitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_right"/>
+        <action
+            android:id="@+id/action_noteFragment_to_storeFragment"
+            app:destination="@id/storeFragment" />
     </fragment>
     <fragment
         android:id="@+id/noteDetailFragment"
@@ -47,4 +50,9 @@
         android:name="com.geeks.noteapp.ui.fragments.splashScreen.SplashScreenFragment"
         android:label="fragment_splash_screen"
         tools:layout="@layout/fragment_splash_screen" />
+    <fragment
+        android:id="@+id/storeFragment"
+        android:name="com.geeks.noteapp.ui.fragments.store.StoreFragment"
+        android:label="fragment_store"
+        tools:layout="@layout/fragment_store" />
 </navigation>

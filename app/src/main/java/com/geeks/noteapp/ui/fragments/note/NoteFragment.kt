@@ -59,6 +59,9 @@ class NoteFragment : Fragment(), OnClickItem {
         fabAdd.setOnClickListener {
             findNavController().navigate(R.id.action_noteFragment_to_noteDetailFragment)
         }
+        store.setOnClickListener {
+            findNavController().navigate(R.id.action_noteFragment_to_storeFragment)
+        }
 
         btnVariations.setOnClickListener {
             toggleLayoutManager()
