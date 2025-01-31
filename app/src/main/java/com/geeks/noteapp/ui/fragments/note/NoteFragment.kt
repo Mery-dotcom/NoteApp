@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
@@ -60,7 +61,32 @@ class NoteFragment : Fragment(), OnClickItem {
             findNavController().navigate(R.id.action_noteFragment_to_noteDetailFragment)
         }
         store.setOnClickListener {
-            findNavController().navigate(R.id.action_noteFragment_to_storeFragment)
+            findNavController().navigate(R.id.storeFragment)
+        }
+
+        btnMenu.setOnClickListener {
+            val popupMenu = androidx.appcompat.widget.PopupMenu(requireContext(), btnMenu)
+            popupMenu.inflate(R.menu.popup_menu)
+
+            popupMenu.setOnMenuItemClickListener { menuItem ->
+                when (menuItem.itemId) {
+                    R.id.action_first_folder -> {
+                        findNavController().navigate(R.id.firstFolderFragment)
+                        true
+                    }
+                    R.id.action_store -> {
+                        findNavController().navigate(R.id.storeFragment)
+                        true
+                    }
+                    R.id.action_second_folder -> {
+                        findNavController().navigate(R.id.secondFolderFragment)
+                        true
+                    }
+                    else -> false
+                }
+            }
+
+            popupMenu.show()
         }
 
         btnVariations.setOnClickListener {
