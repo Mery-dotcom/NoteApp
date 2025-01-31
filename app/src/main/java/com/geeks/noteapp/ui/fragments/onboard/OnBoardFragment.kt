@@ -69,7 +69,7 @@ class OnBoardFragment : Fragment() {
         })
         binding.button.setOnClickListener{
             val sharedPreferences = PreferenceHelper()
-            sharedPreferences.unit(requireContext())
+            sharedPreferences.init(requireContext())
             sharedPreferences.onBoard = true
             sharedPreferences.isRegistered = true
             findNavController().navigate(R.id.noteFragment)

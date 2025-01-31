@@ -25,17 +25,5 @@ class SplashScreenFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        binding.splashScreen.setAnimation(R.raw.splash_screen)
-        binding.splashScreen.playAnimation()
-
-        android.os.Handler(Looper.getMainLooper()).postDelayed({
-            val currentUser = FirebaseAuth.getInstance().currentUser
-            if (currentUser != null){
-                findNavController().navigate(R.id.action_splashScreenFragment_to_noteFragment)
-            }else{
-                findNavController().navigate(R.id.action_splashScreenFragment_to_onBoardPagerFragment)
-            }
-        }, 3000)
     }
 }

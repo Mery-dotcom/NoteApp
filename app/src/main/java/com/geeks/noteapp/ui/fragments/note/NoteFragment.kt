@@ -17,7 +17,6 @@ import com.geeks.noteapp.data.models.NoteModel
 import com.geeks.noteapp.databinding.FragmentNoteBinding
 import com.geeks.noteapp.ui.interfaces.OnClickItem
 
-
 class NoteFragment : Fragment(), OnClickItem {
 
     private lateinit var binding: FragmentNoteBinding

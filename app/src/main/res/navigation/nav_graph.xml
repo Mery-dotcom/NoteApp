@@ -56,6 +56,9 @@
         <action
             android:id="@+id/action_splashScreenFragment_to_onBoardPagerFragment"
             app:destination="@id/onBoardPagerFragment" />
+        <action
+            android:id="@+id/action_splashScreenFragment_to_authFragment"
+            app:destination="@id/authFragment" />
     </fragment>
     <fragment
         android:id="@+id/storeFragment"

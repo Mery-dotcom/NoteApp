@@ -7,7 +7,7 @@ class PreferenceHelper {
 
     private lateinit var sharedPreferences: SharedPreferences
 
-    fun unit(context: Context) {
+    fun init(context: Context) {
         sharedPreferences = context.getSharedPreferences("shared", Context.MODE_PRIVATE)
     }
 
