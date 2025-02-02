@@ -3,10 +3,14 @@ package com.geeks.noteapp.ui.fragments.note
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AlertDialog
+import androidx.core.view.GravityCompat
+import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -16,12 +20,15 @@ import com.geeks.noteapp.R
 import com.geeks.noteapp.data.models.NoteModel
 import com.geeks.noteapp.databinding.FragmentNoteBinding
 import com.geeks.noteapp.ui.interfaces.OnClickItem
+import com.google.android.material.navigation.NavigationView
 
 class NoteFragment : Fragment(), OnClickItem {
 
     private lateinit var binding: FragmentNoteBinding
     private val noteAdapter = NoteAdapter(this, this)
     private var isLinearLayout = true
+    private lateinit var drawerLayout: DrawerLayout
+    private lateinit var actionBarDrawerToggle: ActionBarDrawerToggle
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -36,6 +43,7 @@ class NoteFragment : Fragment(), OnClickItem {
         initialize()
         setupListener()
         getData()
+        setupDrawer()
     }
 
     private fun initialize() {
@@ -43,6 +51,7 @@ class NoteFragment : Fragment(), OnClickItem {
             layoutManager = LinearLayoutManager(requireContext())
             adapter = noteAdapter
         }
+        drawerLayout = binding.drawerLayout
     }
 
     private fun toggleLayoutManager() {
@@ -57,39 +66,21 @@ class NoteFragment : Fragment(), OnClickItem {
 
     private fun setupListener() = with(binding) {
         fabAdd.setOnClickListener {
+            drawerLayout.closeDrawers()
             findNavController().navigate(R.id.action_noteFragment_to_noteDetailFragment)
         }
         store.setOnClickListener {
+            drawerLayout.closeDrawers()
             findNavController().navigate(R.id.storeFragment)
         }
 
-        btnMenu.setOnClickListener {
-            val popupMenu = androidx.appcompat.widget.PopupMenu(requireContext(), btnMenu)
-            popupMenu.inflate(R.menu.popup_menu)
-
-            popupMenu.setOnMenuItemClickListener { menuItem ->
-                when (menuItem.itemId) {
-                    R.id.action_first_folder -> {
-                        findNavController().navigate(R.id.firstFolderFragment)
-                        true
-                    }
-                    R.id.action_store -> {
-                        findNavController().navigate(R.id.storeFragment)
-                        true
-                    }
-                    R.id.action_second_folder -> {
-                        findNavController().navigate(R.id.secondFolderFragment)
-                        true
-                    }
-                    else -> false
-                }
-            }
-
-            popupMenu.show()
+        btnVariations.setOnClickListener {
+            drawerLayout.closeDrawers()
+            toggleLayoutManager()
         }
 
-        btnVariations.setOnClickListener {
-            toggleLayoutManager()
+        btnMenu.setOnClickListener {
+            drawerLayout.openDrawer(GravityCompat.START)
         }
     }
 
@@ -97,6 +88,34 @@ class NoteFragment : Fragment(), OnClickItem {
         App.appDataBase?.noteDao()?.getAll()?.observe(viewLifecycleOwner) { model ->
             noteAdapter.submitList(model)
         }
+    }
+
+    private fun setupDrawer() {
+        actionBarDrawerToggle = ActionBarDrawerToggle(
+            requireActivity(),
+            drawerLayout,
+            R.string.nav_open,
+            R.string.nav_close
+        )
+
+        drawerLayout.addDrawerListener(actionBarDrawerToggle)
+        actionBarDrawerToggle.syncState()
+
+        binding.navView.setNavigationItemSelectedListener { navMenu ->
+            when (navMenu.itemId) {
+                R.id.nav_first_folder -> findNavController().navigate(R.id.firstFolderFragment)
+                R.id.nav_store -> findNavController().navigate(R.id.storeFragment)
+                R.id.nav_second_folder -> findNavController().navigate(R.id.secondFolderFragment)
+            }
+            drawerLayout.closeDrawer(GravityCompat.START)
+            true
+        }
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return if (actionBarDrawerToggle.onOptionsItemSelected(item)) {
+            true
+        } else super.onOptionsItemSelected(item)
     }
 
     override fun onLongClick(noteModel: NoteModel) {

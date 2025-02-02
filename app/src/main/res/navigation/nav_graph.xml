@@ -30,6 +30,15 @@
         <action
             android:id="@+id/action_noteFragment_to_authFragment"
             app:destination="@id/authFragment" />
+        <action
+            android:id="@+id/action_noteFragment_to_firstFolderFragment"
+            app:destination="@id/firstFolderFragment" />
+        <action
+            android:id="@+id/action_noteFragment_to_secondFolderFragment"
+            app:destination="@id/secondFolderFragment" />
+        <action
+            android:id="@+id/action_noteFragment_to_storeFragment"
+            app:destination="@id/storeFragment" />
     </fragment>
     <fragment
         android:id="@+id/noteDetailFragment"

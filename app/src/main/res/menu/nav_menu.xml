@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/action_first_folder"
+        android:id="@+id/nav_first_folder"
         android:title="First Folder Fragment"/>
 
     <item
-        android:id="@+id/action_store"
+        android:id="@+id/nav_store"
         android:title="Store Fragment"/>
 
     <item
-        android:id="@+id/action_second_folder"
+        android:id="@+id/nav_second_folder"
         android:title="Second Folder Fragment"/>
 </menu>

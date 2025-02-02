@@ -68,4 +68,6 @@ dependencies {
     implementation("com.google.firebase:firebase-analytics")
 
     implementation("com.google.android.gms:play-services-auth:21.3.0")
+
+    implementation ("com.google.android.material:material:1.3.0-alpha03")
 }
