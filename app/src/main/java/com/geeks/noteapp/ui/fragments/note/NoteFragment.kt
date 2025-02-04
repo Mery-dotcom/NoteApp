@@ -1,12 +1,12 @@
 package com.geeks.noteapp.ui.fragments.note
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AlertDialog
 import androidx.core.view.GravityCompat
@@ -15,20 +15,22 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.geeks.notapp.ui.adapters.NoteAdapter
-import com.geeks.noteapp.App
 import com.geeks.noteapp.R
 import com.geeks.noteapp.data.models.NoteModel
 import com.geeks.noteapp.databinding.FragmentNoteBinding
+import com.geeks.noteapp.presenter.noteList.NoteContract
+import com.geeks.noteapp.presenter.noteList.NotePresenter
 import com.geeks.noteapp.ui.interfaces.OnClickItem
-import com.google.android.material.navigation.NavigationView
 
-class NoteFragment : Fragment(), OnClickItem {
+class NoteFragment : Fragment(), OnClickItem, NoteContract.View {
 
     private lateinit var binding: FragmentNoteBinding
     private val noteAdapter = NoteAdapter(this, this)
     private var isLinearLayout = true
     private lateinit var drawerLayout: DrawerLayout
     private lateinit var actionBarDrawerToggle: ActionBarDrawerToggle
+
+    private val presenter by lazy { NotePresenter(this) }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -42,8 +44,9 @@ class NoteFragment : Fragment(), OnClickItem {
         super.onViewCreated(view, savedInstanceState)
         initialize()
         setupListener()
-        getData()
+//        getData()
         setupDrawer()
+        presenter.loadNotes()
     }
 
     private fun initialize() {
@@ -84,11 +87,11 @@ class NoteFragment : Fragment(), OnClickItem {
         }
     }
 
-    private fun getData() {
-        App.appDataBase?.noteDao()?.getAll()?.observe(viewLifecycleOwner) { model ->
-            noteAdapter.submitList(model)
-        }
-    }
+//    private fun getData() {
+//        App.appDataBase?.noteDao()?.getAll()?.observe(viewLifecycleOwner) { model ->
+//            noteAdapter.submitList(model)
+//        }
+//    }
 
     private fun setupDrawer() {
         actionBarDrawerToggle = ActionBarDrawerToggle(
@@ -123,10 +126,12 @@ class NoteFragment : Fragment(), OnClickItem {
         with(builder) {
             setTitle("Удалить заметку")
             setPositiveButton("Удалить") { dialog, _ ->
-                App.appDataBase?.noteDao()?.deleteNote(noteModel)
+                presenter.deleteNote(noteModel)
+                dialog.dismiss()
             }
             setNegativeButton("Отмена") { dialog, _ ->
                 dialog.cancel()
+
             }
             show()
         }
@@ -136,5 +141,14 @@ class NoteFragment : Fragment(), OnClickItem {
     override fun onClick(noteModel: NoteModel) {
         val action = NoteFragmentDirections.actionNoteFragmentToNoteDetailFragment(noteModel.id)
         findNavController().navigate(action)
+    }
+
+    override fun showNotes(notes: List<NoteModel>) {
+        noteAdapter.submitList(notes)
+        noteAdapter.notifyDataSetChanged()
+    }
+
+    override fun showError(message: String) {
+        Log.e("NotesFragment", message)
     }
 }

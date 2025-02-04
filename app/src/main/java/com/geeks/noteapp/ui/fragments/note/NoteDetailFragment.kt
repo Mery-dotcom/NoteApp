@@ -2,6 +2,7 @@ package com.geeks.noteapp.ui.fragments.note
 
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -12,15 +13,19 @@ import com.geeks.noteapp.App
 import com.geeks.noteapp.R
 import com.geeks.noteapp.data.models.NoteModel
 import com.geeks.noteapp.databinding.FragmentNoteDetailBinding
+import com.geeks.noteapp.presenter.noteDetail.NoteDetailContract
+import com.geeks.noteapp.presenter.noteDetail.NoteDetailPresenter
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
-class NoteDetailFragment : Fragment() {
+class NoteDetailFragment : Fragment(), NoteDetailContract.View {
 
     private lateinit var binding: FragmentNoteDetailBinding
     private var noteId: Int = -1
     private var selectedColor: Int = Color.WHITE
+
+    private val presenter by lazy { NoteDetailPresenter(this) }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -67,15 +72,16 @@ class NoteDetailFragment : Fragment() {
             if (etTitle.isNotEmpty() && etDescription.isNotEmpty()){
                 if (noteId != -1){
                     val updateNote = NoteModel(etTitle, etDescription, date, time, selectedColor).apply { id = noteId }
-                    App.appDataBase?.noteDao()?.updateNote(updateNote)
+                    presenter.updateNote(updateNote)
                     Toast.makeText(requireContext(), "Заметка обновлена", Toast.LENGTH_SHORT).show()
                 }else{
                     val newNote = NoteModel(etTitle, etDescription, date, time, selectedColor)
-                    App.appDataBase?.noteDao()?.insertNote(newNote)
+                    presenter.saveNote(newNote)
                     Toast.makeText(requireContext(), "Заметка добавлена", Toast.LENGTH_SHORT).show()
                 }
                 findNavController().navigateUp()
-            } else{
+            }
+            else{
                 Toast.makeText(requireContext(), "Заполните все поля", Toast.LENGTH_SHORT).show()
             }
         }
@@ -105,5 +111,15 @@ class NoteDetailFragment : Fragment() {
         selectedColor = color
         binding.colorPickerContainer.visibility = View.GONE
         Toast.makeText(requireContext(), "", Toast.LENGTH_SHORT).show()
+    }
+
+    override fun showSaved(note: NoteModel) {
+    }
+
+    override fun showError(message: String) {
+        Log.e("NoteDetailFragment", message)
+    }
+
+    override fun noteUpdated() {
     }
 }
