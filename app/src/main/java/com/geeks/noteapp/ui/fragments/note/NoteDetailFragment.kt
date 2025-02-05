@@ -22,7 +22,6 @@ import java.util.Locale
 class NoteDetailFragment : Fragment(), NoteDetailContract.View {
 
     private lateinit var binding: FragmentNoteDetailBinding
-    private var noteId: Int = -1
     private var selectedColor: Int = Color.WHITE
 
     private val presenter by lazy { NoteDetailPresenter(this) }
@@ -38,48 +37,23 @@ class NoteDetailFragment : Fragment(), NoteDetailContract.View {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val date = SimpleDateFormat("dd.MM.yyyy", Locale.getDefault()).format(Date())
-        val time = SimpleDateFormat("HH:mm", Locale.getDefault()).format(Date())
-        binding.txtDate.text = date
-        binding.txtTime.text = time
-
-        arguments?.let { args ->
-            noteId = args.getInt("noteId", -1)
-        }
-        if (noteId != -1){
-            presenter.getNoteById(noteId)
-        }
-
-//        updateNote()
         setupListener()
+        presenter.getCurrentDateTime()
+        presenter.loadNote(arguments)
     }
 
     private fun setupListener() = with(binding){
         btnAdd.setOnClickListener{
-            val etTitle = etTitle.text.toString()
-            val etDescription = etDescription.text.toString()
-            val date = txtDate.text.toString()
-            val time = txtTime.text.toString()
-
-            if (etTitle.isNotEmpty() && etDescription.isNotEmpty()){
-                    val updateNote = NoteModel(etTitle, etDescription, date, time, selectedColor).apply { id = noteId }
-                    if (noteId != -1){
-                        presenter.updateNote(updateNote)
-                    Toast.makeText(requireContext(), "Заметка обновлена", Toast.LENGTH_SHORT).show()
-                }else{
-                    val newNote = NoteModel(etTitle, etDescription, date, time, selectedColor)
-                    presenter.saveNote(newNote)
-                    Toast.makeText(requireContext(), "Заметка добавлена", Toast.LENGTH_SHORT).show()
-                }
-                findNavController().navigateUp()
-            }
-            else{
-                Toast.makeText(requireContext(), "Заполните все поля", Toast.LENGTH_SHORT).show()
-            }
+            presenter.onSaveClicked(
+            etTitle.text.toString(),
+            etDescription.text.toString(),
+            txtDate.text.toString(),
+            txtTime.text.toString(),
+                selectedColor)
         }
 
         btnBack.setOnClickListener{
-            findNavController().navigateUp()
+            presenter.onBackClicked()
         }
 
         btnChooseColor.setOnClickListener{
@@ -119,5 +93,18 @@ class NoteDetailFragment : Fragment(), NoteDetailContract.View {
         binding.etTitle.setText(note.title)
         binding.etDescription.setText(note.description)
         selectedColor = note.color!!
+    }
+
+    override fun showDateTime(date: String, time: String) {
+        binding.txtDate.text = date
+        binding.txtTime.text = time
+    }
+
+    override fun showMessage(message: String) {
+        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+    }
+
+    override fun navigateBack() {
+        findNavController().navigateUp()
     }
 }
