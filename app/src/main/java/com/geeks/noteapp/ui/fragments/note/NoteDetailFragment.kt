@@ -40,26 +40,18 @@ class NoteDetailFragment : Fragment(), NoteDetailContract.View {
 
         val date = SimpleDateFormat("dd.MM.yyyy", Locale.getDefault()).format(Date())
         val time = SimpleDateFormat("HH:mm", Locale.getDefault()).format(Date())
-
         binding.txtDate.text = date
         binding.txtTime.text = time
 
-        updateNote()
-        setupListener()
-    }
-
-    private fun updateNote() {
         arguments?.let { args ->
             noteId = args.getInt("noteId", -1)
         }
         if (noteId != -1){
-            val  id = App.appDataBase?.noteDao()?.getById(noteId)
-            id?.let { model ->
-                binding.etTitle.setText(model.title)
-                binding.etDescription.setText(model.description)
-                selectedColor = model.color!!
-            }
+            presenter.getNoteById(noteId)
         }
+
+//        updateNote()
+        setupListener()
     }
 
     private fun setupListener() = with(binding){
@@ -70,9 +62,9 @@ class NoteDetailFragment : Fragment(), NoteDetailContract.View {
             val time = txtTime.text.toString()
 
             if (etTitle.isNotEmpty() && etDescription.isNotEmpty()){
-                if (noteId != -1){
                     val updateNote = NoteModel(etTitle, etDescription, date, time, selectedColor).apply { id = noteId }
-                    presenter.updateNote(updateNote)
+                    if (noteId != -1){
+                        presenter.updateNote(updateNote)
                     Toast.makeText(requireContext(), "Заметка обновлена", Toast.LENGTH_SHORT).show()
                 }else{
                     val newNote = NoteModel(etTitle, etDescription, date, time, selectedColor)
@@ -110,7 +102,7 @@ class NoteDetailFragment : Fragment(), NoteDetailContract.View {
     private fun selectColor(color: Int) {
         selectedColor = color
         binding.colorPickerContainer.visibility = View.GONE
-        Toast.makeText(requireContext(), "", Toast.LENGTH_SHORT).show()
+        Toast.makeText(requireContext(), "Цвет выбран", Toast.LENGTH_SHORT).show()
     }
 
     override fun showSaved(note: NoteModel) {
@@ -121,5 +113,11 @@ class NoteDetailFragment : Fragment(), NoteDetailContract.View {
     }
 
     override fun noteUpdated() {
+    }
+
+    override fun showNote(note: NoteModel) {
+        binding.etTitle.setText(note.title)
+        binding.etDescription.setText(note.description)
+        selectedColor = note.color!!
     }
 }
