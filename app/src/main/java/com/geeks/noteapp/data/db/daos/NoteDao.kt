@@ -13,7 +13,7 @@ import com.geeks.noteapp.data.models.NoteModel
 interface NoteDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertNote(noteModel: NoteModel)
+    fun insertNote(noteModel: NoteModel): Long
 
     @Query("SELECT * FROM noteModel")
     fun getAll(): LiveData<List<NoteModel>>

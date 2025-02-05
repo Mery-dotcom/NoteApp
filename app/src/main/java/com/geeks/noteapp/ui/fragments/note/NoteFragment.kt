@@ -44,7 +44,6 @@ class NoteFragment : Fragment(), OnClickItem, NoteContract.View {
         super.onViewCreated(view, savedInstanceState)
         initialize()
         setupListener()
-//        getData()
         setupDrawer()
         presenter.loadNotes()
     }
@@ -68,30 +67,12 @@ class NoteFragment : Fragment(), OnClickItem, NoteContract.View {
     }
 
     private fun setupListener() = with(binding) {
-        fabAdd.setOnClickListener {
-            drawerLayout.closeDrawers()
-            findNavController().navigate(R.id.action_noteFragment_to_noteDetailFragment)
-        }
-        store.setOnClickListener {
-            drawerLayout.closeDrawers()
-            findNavController().navigate(R.id.storeFragment)
-        }
-
-        btnVariations.setOnClickListener {
-            drawerLayout.closeDrawers()
-            toggleLayoutManager()
-        }
-
-        btnMenu.setOnClickListener {
-            drawerLayout.openDrawer(GravityCompat.START)
-        }
+        fabAdd.setOnClickListener { presenter.onAddClicked() }
+        store.setOnClickListener { presenter.onStoreClicked() }
+        btnVariations.setOnClickListener { toggleLayoutManager() }
+        btnMenu.setOnClickListener { drawerLayout.openDrawer(GravityCompat.START) }
     }
 
-//    private fun getData() {
-//        App.appDataBase?.noteDao()?.getAll()?.observe(viewLifecycleOwner) { model ->
-//            noteAdapter.submitList(model)
-//        }
-//    }
 
     private fun setupDrawer() {
         actionBarDrawerToggle = ActionBarDrawerToggle(
@@ -105,42 +86,36 @@ class NoteFragment : Fragment(), OnClickItem, NoteContract.View {
         actionBarDrawerToggle.syncState()
 
         binding.navView.setNavigationItemSelectedListener { navMenu ->
-            when (navMenu.itemId) {
-                R.id.nav_first_folder -> findNavController().navigate(R.id.firstFolderFragment)
-                R.id.nav_store -> findNavController().navigate(R.id.storeFragment)
-                R.id.nav_second_folder -> findNavController().navigate(R.id.secondFolderFragment)
-            }
+            presenter.onDrawerItemClicked(navMenu.itemId)
             drawerLayout.closeDrawer(GravityCompat.START)
             true
         }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return if (actionBarDrawerToggle.onOptionsItemSelected(item)) {
-            true
-        } else super.onOptionsItemSelected(item)
+        return actionBarDrawerToggle.onOptionsItemSelected(item) || super.onOptionsItemSelected(item)
     }
 
     override fun onLongClick(noteModel: NoteModel) {
-        val builder = AlertDialog.Builder(requireContext())
-        with(builder) {
-            setTitle("Удалить заметку")
-            setPositiveButton("Удалить") { dialog, _ ->
-                presenter.deleteNote(noteModel)
-                dialog.dismiss()
-            }
-            setNegativeButton("Отмена") { dialog, _ ->
-                dialog.cancel()
-
-            }
-            show()
-        }
-        builder.create()
+        presenter.onNoteLongClicked(noteModel)
+//        val builder = AlertDialog.Builder(requireContext())
+//        with(builder) {
+//            setTitle("Удалить заметку")
+//            setPositiveButton("Удалить") { dialog, _ ->
+//                presenter.deleteNote(noteModel)
+//                dialog.dismiss()
+//            }
+//            setNegativeButton("Отмена") { dialog, _ ->
+//                dialog.cancel()
+//
+//            }
+//            show()
+//        }
+//        builder.create()
     }
 
     override fun onClick(noteModel: NoteModel) {
-        val action = NoteFragmentDirections.actionNoteFragmentToNoteDetailFragment(noteModel.id)
-        findNavController().navigate(action)
+        presenter.onNoteClicked(noteModel)
     }
 
     override fun showNotes(notes: List<NoteModel>) {
@@ -150,5 +125,31 @@ class NoteFragment : Fragment(), OnClickItem, NoteContract.View {
 
     override fun showError(message: String) {
         Log.e("NotesFragment", message)
+    }
+
+    override fun navigateToNoteDetail(noteId: Int?) {
+        val action = NoteFragmentDirections.actionNoteFragmentToNoteDetailFragment(noteId ?: -1)
+        findNavController().navigate(action)
+    }
+
+    override fun navigateToStore() {
+        findNavController().navigate(R.id.storeFragment)
+    }
+
+    override fun navigateToFragment(fragmentId: Int) {
+        findNavController().navigate(fragmentId)
+    }
+
+    override fun showDeleteDialog(note: NoteModel) {
+        val builder = AlertDialog.Builder(requireContext())
+        builder.setTitle("Удалить заметку?")
+            .setPositiveButton("Удалить") { dialog, _ ->
+                presenter.deleteNote(note)
+                dialog.dismiss()
+            }
+            .setNegativeButton("Отмена") { dialog, _ ->
+                dialog.dismiss()
+            }
+            .show()
     }
 }
