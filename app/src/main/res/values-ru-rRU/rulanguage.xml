@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Мои Заметки</string>
+    <string name="nav_open">Открыть меню</string>
+    <string name="nav_close">Закрыть меню</string>
+    <string name="add_note">Добавить заметку</string>
+    <string name="delete_note">Удалить заметку?</string>
+    <string name="delete">Удалить</string>
+    <string name="cancel">Отмена</string>
+    <string name="color_chosen">Цвет выбран</string>
+    <string name="no_notes">Заметок нет</string>
+    <string name="store">Сторе</string>
+    <string name="all_notes">Все заметки</string>
+    <string name="change_color">Поменять цвет</string>
+</resources>

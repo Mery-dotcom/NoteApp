@@ -27,7 +27,7 @@
             android:id="@+id/title"
             android:layout_gravity="center"
             android:textSize="18sp"
-            android:text="Все заметки"
+            android:text="@string/all_notes"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
 
@@ -114,7 +114,7 @@
         android:id="@+id/store"
         android:backgroundTint="#D7D4D4"
         style="@style/Add.Button"
-        android:text="Store"
+        android:text="@string/store"
         android:layout_marginStart="24dp"
         android:layout_marginBottom="36dp"
         app:layout_constraintStart_toStartOf="parent"
@@ -128,5 +128,11 @@
         android:layout_height="match_parent"
         android:layout_gravity="start"
         app:menu="@menu/nav_menu" />
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone" />
 
 </androidx.drawerlayout.widget.DrawerLayout>

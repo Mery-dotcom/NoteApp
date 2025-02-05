@@ -3,12 +3,19 @@ package com.geeks.noteapp.presenter.noteList
 import com.geeks.noteapp.App
 import com.geeks.noteapp.R
 import com.geeks.noteapp.data.models.NoteModel
+import com.geeks.noteapp.sealed.NoteState
 
 class NotePresenter(private val view: NoteContract.View) : NoteContract.Presenter {
 
     override fun loadNotes() {
+        view.showNoteState(NoteState.Loading)
+
         App.appDataBase?.noteDao()?.getAll()?.observeForever { notes ->
-            view.showNotes(notes)
+            if (notes.isEmpty()) {
+                view.showNoteState(NoteState.Error("Нет заметок"))
+            } else {
+                view.showNoteState(NoteState.Success(notes))
+            }
         }
     }
 

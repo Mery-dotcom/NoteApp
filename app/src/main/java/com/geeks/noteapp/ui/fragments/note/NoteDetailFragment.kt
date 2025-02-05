@@ -76,7 +76,7 @@ class NoteDetailFragment : Fragment(), NoteDetailContract.View {
     private fun selectColor(color: Int) {
         selectedColor = color
         binding.colorPickerContainer.visibility = View.GONE
-        Toast.makeText(requireContext(), "Цвет выбран", Toast.LENGTH_SHORT).show()
+        Toast.makeText(requireContext(), R.string.color_chosen, Toast.LENGTH_SHORT).show()
     }
 
     override fun showSaved(note: NoteModel) {

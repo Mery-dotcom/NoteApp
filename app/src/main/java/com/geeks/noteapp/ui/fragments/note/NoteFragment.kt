@@ -1,5 +1,6 @@
 package com.geeks.noteapp.ui.fragments.note
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -7,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AlertDialog
 import androidx.core.view.GravityCompat
@@ -20,7 +22,9 @@ import com.geeks.noteapp.data.models.NoteModel
 import com.geeks.noteapp.databinding.FragmentNoteBinding
 import com.geeks.noteapp.presenter.noteList.NoteContract
 import com.geeks.noteapp.presenter.noteList.NotePresenter
+import com.geeks.noteapp.sealed.NoteState
 import com.geeks.noteapp.ui.interfaces.OnClickItem
+import java.util.Locale
 
 class NoteFragment : Fragment(), OnClickItem, NoteContract.View {
 
@@ -127,6 +131,23 @@ class NoteFragment : Fragment(), OnClickItem, NoteContract.View {
         Log.e("NotesFragment", message)
     }
 
+    override fun showNoteState(state: NoteState) {
+        when (state) {
+            is NoteState.Loading -> {
+                binding.progressBar.visibility = View.VISIBLE
+            }
+            is NoteState.Success -> {
+                binding.progressBar.visibility = View.GONE
+                noteAdapter.submitList(state.notes)
+                noteAdapter.notifyDataSetChanged()
+            }
+            is NoteState.Error -> {
+                binding.progressBar.visibility = View.GONE
+                Toast.makeText(requireContext(), state.message, Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
     override fun navigateToNoteDetail(noteId: Int?) {
         val action = NoteFragmentDirections.actionNoteFragmentToNoteDetailFragment(noteId ?: -1)
         findNavController().navigate(action)
@@ -142,14 +163,25 @@ class NoteFragment : Fragment(), OnClickItem, NoteContract.View {
 
     override fun showDeleteDialog(note: NoteModel) {
         val builder = AlertDialog.Builder(requireContext())
-        builder.setTitle("Удалить заметку?")
-            .setPositiveButton("Удалить") { dialog, _ ->
+        builder.setTitle(R.string.delete_note)
+            .setPositiveButton(R.string.delete) { dialog, _ ->
                 presenter.deleteNote(note)
                 dialog.dismiss()
             }
-            .setNegativeButton("Отмена") { dialog, _ ->
+            .setNegativeButton(R.string.cancel) { dialog, _ ->
                 dialog.dismiss()
             }
             .show()
     }
+
+//    fun setLocale(languageCode: String) {
+//        val locale = Locale(languageCode)
+//        Locale.setDefault(locale)
+//        val config = resources.configuration
+//        config.setLocale(locale)
+//        resources.updateConfiguration(config, resources.displayMetrics)
+//
+//        val language = "ru"
+//        setLocale(language)
+//    }
 }

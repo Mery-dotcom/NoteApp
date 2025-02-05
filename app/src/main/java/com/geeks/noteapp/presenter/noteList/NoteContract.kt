@@ -1,6 +1,7 @@
 package com.geeks.noteapp.presenter.noteList
 
 import com.geeks.noteapp.data.models.NoteModel
+import com.geeks.noteapp.sealed.NoteState
 
 interface NoteContract {
     interface View {
@@ -10,6 +11,7 @@ interface NoteContract {
         fun navigateToStore()
         fun navigateToFragment(fragmentId: Int)
         fun showDeleteDialog(note: NoteModel)
+        fun showNoteState(state: NoteState)
     }
 
     interface Presenter {
